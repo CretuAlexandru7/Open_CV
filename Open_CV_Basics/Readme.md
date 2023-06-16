@@ -9,6 +9,8 @@
   <li>Image thresholding: Converts the frame into a binary image based on a specified threshold.</li>
   <li>Image mirroring: Mirrors the frame horizontally.</li>
   <li>Flipping the image: Flips the frame vertically.</li>
+  <li>Converting image to a grayscale schema</li>
+  <li>Motion: calculate the absolute difference between two framse</li>
 </ul>
 
 <h2>Dependencies</h2>

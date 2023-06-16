@@ -97,3 +97,56 @@ void vFlipImage(cv::Mat frame, int rows, int cols)
         }
     }
 }
+
+/* Function used to convert the received (parameter) frame into a grayscale one. */
+/* For each pixel, it retrieves the BGR pixel values and applies the grayscale conversion formula:
+ * 0.299 * R + 0.587 * G + 0.114 * B.*/
+cv::Mat convertToGrayscale(const cv::Mat& frame) {
+    /*  Create an empty grayscale frame with the same dimensions as the input frame */
+    cv::Mat temp_frame(frame.size(), frame.type());
+
+    /*  Iterate over each pixel of the input frame and apply the formula to it */
+    for (int i = 0; i < frame.rows; i++) {
+        for (int j = 0; j < frame.cols; j++) {
+            // Get the BGR pixel values
+            cv::Vec3b bgrPixel = frame.at<cv::Vec3b>(i, j);
+            // Convert to grayscale using formula: 0.299*R + 0.587*G + 0.114*B
+            unsigned char grayscaleValue = static_cast<unsigned char>(0.299 * bgrPixel[2] +
+                                                                      0.587 * bgrPixel[1] +
+                                                                      0.114 * bgrPixel[0]);
+            // Set the grayscale value in the corresponding pixel of the grayscale frame
+            temp_frame.at<cv::Vec3b>(i, j) = cv::Vec3b(grayscaleValue, grayscaleValue, grayscaleValue);
+        }
+    }
+
+    return temp_frame;
+}
+
+
+/* Function used to calculate the absolute difference between two consecutive frames, on a pixel-wise basis */
+cv::Mat calculateAbsoluteDifference(const cv::Mat& frame1, const cv::Mat& frame2) {
+    /*  Ensure that the input frames have the same sizeand type */
+    CV_Assert(frame1.size() == frame2.size() && frame1.type() == frame2.type());
+
+    /*  Create an empty frame to store the absolute difference between two consecutive ones */
+    cv::Mat diff(frame1.size(), frame1.type());
+
+    /* Iterate over each pixel of the frames and make the difference */
+    for (int i = 0; i < frame1.rows; i++) {
+        for (int j = 0; j < frame1.cols; j++) {
+            // Get the pixel values of both frames
+            cv::Vec3b pixel1 = frame1.at<cv::Vec3b>(i, j);
+            cv::Vec3b pixel2 = frame2.at<cv::Vec3b>(i, j);
+
+            int diffBlue = std::abs(pixel1[0] - pixel2[0]);
+            int diffGreen = std::abs(pixel1[1] - pixel2[1]);
+            int diffRed = std::abs(pixel1[2] - pixel2[2]);
+
+            /* Set the absolute difference in the corresponding pixel of the output frame */
+            diff.at<cv::Vec3b>(i, j) = cv::Vec3b(diffBlue, diffGreen, diffRed);
+        }
+    }
+
+    return diff;
+}
+

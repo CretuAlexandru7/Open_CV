@@ -7,6 +7,8 @@
 * **** image thresholding;                                                                 *
 * **** image mirroring;                                                                    *
 * **** flipping the image;                                                                 *
+* **** grayscale;                                                                          *
+* **** absolute difference between two frames;                                             *
 *******************************************************************************************/
 
 #include <opencv2/core.hpp>
@@ -59,6 +61,8 @@ int main()
     std::cout << "     0. EXIT the program;" << std::endl;
     std::cout << "###################################################" << std::endl;
 
+    /* Frame used when calcultaing the absolute .... */
+    cv::Mat frame2;
     /* Readand process frames from the webcam */
     while (!exitProgram) {
         /* cv::Mat -> class which represents a matrix (used to store/manipulate images)*/
@@ -106,6 +110,15 @@ int main()
             break;
         case 4:
             vFlipImage(frame, frame_rows, frames_cols);
+            break;
+        case 5:
+            frame = convertToGrayscale(frame);
+            cap.read(frame2);
+            frame2 = convertToGrayscale(frame2);
+            frame = calculateAbsoluteDifference(frame, frame2);
+            break;
+        case 6:            
+            frame = convertToGrayscale(frame);
             break;
         case 0:
             exitProgram = true;
