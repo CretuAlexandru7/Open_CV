@@ -150,3 +150,51 @@ cv::Mat calculateAbsoluteDifference(const cv::Mat& frame1, const cv::Mat& frame2
     return diff;
 }
 
+
+/* Sobel's algorithm used in edge detaction */
+void sobelEdgeDetection(const cv::Mat& frame) {
+
+    /* Sobel's Edge Detection */
+    float kernel_sobel_v[9] =
+    {
+        -1.0f, 0.0f, +1.0f,
+        -2.0f, 0.0f, +2.0f,
+        -1.0f, 0.0f, +1.0f,
+    };
+
+    float kernel_sobel_h[9] =
+    {
+        -1.0f, -2.0f, -1.0f,
+         0.0f,  0.0f,  0.0f,
+        +1.0f, +2.0f, +1.0f,
+    };
+
+    // Create an empty output frame with the same size and type as the input frame
+    cv::Mat outputFrame(frame.size(), frame.type());
+
+    // Iterate over each pixel of the input frame (excluding the border pixels)
+    for (int i = 1; i < frame.rows - 1; i++) {
+        for (int j = 1; j < frame.cols - 1; j++) {
+            float fKernelSumH = 0.0f;
+            float fKernelSumV = 0.0f;
+
+            // Apply the Sobel kernels to calculate the gradient in the horizontal and vertical directions
+            for (int n = -1; n <= 1; n++) {
+                for (int m = -1; m <= 1; m++) {
+                    fKernelSumH += frame.at<cv::Vec3b>(i + n, j + m)[0] * kernel_sobel_h[(m + 1) + 3 * (n + 1)];
+                    fKernelSumV += frame.at<cv::Vec3b>(i + n, j + m)[0] * kernel_sobel_v[(m + 1) + 3 * (n + 1)];
+                }
+            }
+
+            // Calculate the gradient magnitude using the horizontal and vertical gradients
+            float gradientMagnitude = std::sqrt(fKernelSumH * fKernelSumH + fKernelSumV * fKernelSumV);
+
+            // Set the gradient magnitude as the pixel value in the output frame
+            outputFrame.at<cv::Vec3b>(i, j) = cv::Vec3b(gradientMagnitude, gradientMagnitude, gradientMagnitude);
+        }
+    }
+
+    // Display the output frame
+    cv::imshow("Sobel Edge Detection", outputFrame);
+}
+

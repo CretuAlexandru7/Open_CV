@@ -10,7 +10,8 @@
   <li>Image mirroring: Mirrors the frame horizontally.</li>
   <li>Flipping the image: Flips the frame vertically.</li>
   <li>Converting image to a grayscale schema</li>
-  <li>Motion: calculate the absolute difference between two framse</li>
+  <li>Motion: calculate the absolute difference between two framse.</li>
+  <li>Sobel's edge detection method. </li>
 </ul>
 
 <h2>Dependencies</h2>
