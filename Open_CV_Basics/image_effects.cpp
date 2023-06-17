@@ -64,7 +64,7 @@ void vDoBinarizeImage(cv::Mat frame, int img_threshold, int rows, int cols)
 
 
 /* Function used to flip the image horizontally -> mirrored / symmetrical effect */
-void vMirrorImage(cv::Mat frame, int rows, int cols)
+void vDoMirrorImage(cv::Mat frame, int rows, int cols)
 {
     /* Iterate and manipulate each pixel */
     for (int i = 0; i < rows; i++) {
@@ -82,7 +82,7 @@ void vMirrorImage(cv::Mat frame, int rows, int cols)
 
 
 /* Function used to flip the image vertically -> flipped / symmetrical effect */
-void vFlipImage(cv::Mat frame, int rows, int cols)
+void vDoFlipImage(cv::Mat frame, int rows, int cols)
 {
     /* Iterate and manipulate each pixel */
     for (int i = 0; i < rows / 2; i++) {
@@ -101,7 +101,7 @@ void vFlipImage(cv::Mat frame, int rows, int cols)
 /* Function used to convert the received (parameter) frame into a grayscale one. */
 /* For each pixel, it retrieves the BGR pixel values and applies the grayscale conversion formula:
  * 0.299 * R + 0.587 * G + 0.114 * B.*/
-cv::Mat convertToGrayscale(const cv::Mat& frame) {
+cv::Mat matDoConvertToGrayscale(const cv::Mat& frame) {
     /*  Create an empty grayscale frame with the same dimensions as the input frame */
     cv::Mat temp_frame(frame.size(), frame.type());
 
@@ -124,7 +124,7 @@ cv::Mat convertToGrayscale(const cv::Mat& frame) {
 
 
 /* Function used to calculate the absolute difference between two consecutive frames, on a pixel-wise basis */
-cv::Mat calculateAbsoluteDifference(const cv::Mat& frame1, const cv::Mat& frame2) {
+cv::Mat matDoCalculateAbsoluteDifference(const cv::Mat& frame1, const cv::Mat& frame2) {
     /*  Ensure that the input frames have the same sizeand type */
     CV_Assert(frame1.size() == frame2.size() && frame1.type() == frame2.type());
 
@@ -152,7 +152,7 @@ cv::Mat calculateAbsoluteDifference(const cv::Mat& frame1, const cv::Mat& frame2
 
 
 /* Sobel's algorithm used in edge detaction */
-void sobelEdgeDetection(const cv::Mat& frame) {
+void vDoSobelEdgeDetection(const cv::Mat& frame) {
 
     /* Sobel's Edge Detection */
     float kernel_sobel_v[9] =
@@ -197,4 +197,23 @@ void sobelEdgeDetection(const cv::Mat& frame) {
     // Display the output frame
     cv::imshow("Sobel Edge Detection", outputFrame);
 }
+
+/* Function use to pixalate the image by a pixelSize value */
+cv::Mat matDoGeneratePixelatedImage(const cv::Mat& inputImage, int pixelSize) {
+    cv::Mat pixelatedImage = inputImage.clone();
+
+    for (int i = 0; i < pixelatedImage.rows; i += pixelSize) {
+        for (int j = 0; j < pixelatedImage.cols; j += pixelSize) {
+            cv::Rect blockRect(j, i, pixelSize, pixelSize);
+            cv::Scalar averageColor = cv::mean(inputImage(blockRect));
+            cv::rectangle(pixelatedImage, blockRect, averageColor, -1);
+        }
+    }
+
+    return pixelatedImage;
+}
+
+
+
+
 

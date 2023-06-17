@@ -12,6 +12,7 @@
   <li>Converting image to a grayscale schema</li>
   <li>Motion: calculate the absolute difference between two framse.</li>
   <li>Sobel's edge detection method. </li>
+  <li>Pixelated image method. </li>
 </ul>
 
 <h2>Dependencies</h2>
